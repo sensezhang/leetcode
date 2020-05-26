@@ -30,7 +30,7 @@ public class Solution20 {
         }
       }
     }
-    return true;
+    return stack.empty();
   }
 
   public static void main(String[] args) {
