@@ -9,38 +9,47 @@ import java.util.Stack;
  */
 public class MinStack {
 
+  int min = Integer.MAX_VALUE;
   /**
    * initialize your data structure here.
    */
-  private Stack<Integer> stack = new Stack<>();
-  private Stack<Integer> minStack = new Stack<>();
+  private Stack<Integer> stack;
 
   public MinStack() {
-
+    stack = new Stack<>();
   }
 
   public void push(int x) {
-    stack.push(x);
-    if (minStack.isEmpty() || minStack.peek() > x) {
-      minStack.push(x);
+    if (x <= min) {
+      stack.push(min);
+      min = x;
     }
+    stack.push(x);
   }
 
   public void pop() {
-    if (stack.isEmpty()) {
-      return;
-    }
-    Integer top = stack.pop();
-    if (!minStack.isEmpty() && top.equals(minStack.peek())) {
-      minStack.pop();
+    int top = stack.pop();
+    if (top==min) {
+      min = stack.pop();
     }
   }
 
   public int top() {
-    return stack.isEmpty() ? 0 : stack.peek();
+    return stack.peek();
   }
 
   public int getMin() {
-    return minStack.isEmpty() ? 0 : minStack.peek();
+    return min;
+  }
+
+  public static void main(String[] args) {
+    MinStack minStack = new MinStack();
+    minStack.push(0);
+    minStack.push(1);
+    minStack.push(0);
+    System.out.println(minStack.getMin());
+    minStack.pop();
+    System.out.println(minStack.top());
+    System.out.println(minStack.getMin());
   }
 }
