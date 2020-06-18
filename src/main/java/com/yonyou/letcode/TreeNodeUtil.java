@@ -1,6 +1,10 @@
 package com.yonyou.letcode;
 
 import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.Deque;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Queue;
 
 /**
@@ -45,23 +49,37 @@ public class TreeNodeUtil {
 //
 //  }
 //
-//  public static List<List<Integer>> traverseTreeNode(TreeNode root) {
-//    List<List<Integer>> result = new ArrayList<>();
-//    if (root == null) {
-//      return result;
-//    }
-//    Deque<TreeNode> treeNodes = new LinkedList<>();
-//    treeNodes.push(root);
-//    while (!treeNodes.isEmpty()) {
-//      TreeNode cur = treeNodes.pop();
-//      if()
-//
-//    }
-//    return result;
-//  }
+  public static void printTreeNode(TreeNode root) {
+    List<List<Integer>> result = traverseTreeNode(root);
+    System.out.println(result);
+  }
+  private static List<List<Integer>> traverseTreeNode(TreeNode root) {
+    List<List<Integer>> result = new ArrayList<>();
+    if (root == null) {
+      return result;
+    }
+    Deque<TreeNode> treeNodes = new LinkedList<>();
+    treeNodes.add(root);
+    while (!treeNodes.isEmpty()) {
+      int size = treeNodes.size();
+      List<Integer> list = new ArrayList<>();
+      for (int i = 0; i < size; i++) {
+        TreeNode childs = treeNodes.pop();
+        list.add(childs.val);
+        if (childs.left != null) {
+          treeNodes.add(childs.left);
+        }
+        if (childs.right != null) {
+          treeNodes.add(childs.right);
+        }
+      }
+      result.add(list);
+    }
+    return result;
+  }
 
   public static void main(String[] args) {
     TreeNode treeNode = buildTreeNode(new int[]{1,-1,2,3,4});
-
+    printTreeNode(treeNode);
   }
 }
