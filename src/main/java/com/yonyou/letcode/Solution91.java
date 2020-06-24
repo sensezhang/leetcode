@@ -12,6 +12,7 @@ public class Solution91 {
     if (s.length() == 0 || s.charAt(0) == '0') {
       return 0;
     }
+
     dp[0] = 1;
     for (int i = 0; i < s.length(); i++) {
       dp[i + 1] = s.charAt(i) == '0' ? 0 : dp[i];
