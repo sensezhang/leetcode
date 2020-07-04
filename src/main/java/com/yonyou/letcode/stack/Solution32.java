@@ -28,4 +28,34 @@ public class Solution32 {
     }
     return maxCount;
   }
+
+  public int longestValidParentheses2(String s) {
+    if (s == null || s.length() <= 1) {
+      return 0;
+    }
+    int leftCount = 0;
+    int i = 0;
+    int[] dp = new int[s.length()];
+    while (i < s.length()) {
+      if (s.charAt(i) == '(') {
+        leftCount++;
+      } else {
+        if (leftCount >= 1) {
+          dp[i] = dp[i - 1] + 2;
+          if (i > dp[i]) {
+            dp[i] = dp[i - dp[i]] + dp[i];
+          }
+          leftCount--;
+        }
+      }
+      i++;
+    }
+    return dp[s.length() -1];
+  }
+
+  public static void main(String[] args) {
+    Solution32 solution32 = new Solution32();
+    int count = solution32.longestValidParentheses2(")()())");
+    System.out.println(count);
+  }
 }
