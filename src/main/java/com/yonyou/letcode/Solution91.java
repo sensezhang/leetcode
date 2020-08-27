@@ -8,19 +8,19 @@ package com.yonyou.letcode;
 public class Solution91 {
 
   public int numDecodings(String s) {
-    int[] dp = new int[s.length() + 1];
     if (s.length() == 0 || s.charAt(0) == '0') {
       return 0;
     }
-
+    int[] dp = new int[s.length() + 1];
     dp[0] = 1;
-    for (int i = 0; i < s.length(); i++) {
-      dp[i + 1] = s.charAt(i) == '0' ? 0 : dp[i];
-      if (i > 0 && (s.charAt(i - 1) == '1' || (s.charAt(i - 1) == '2' && s.charAt(i) <= '6'))) {
+    char[] cs = s.toCharArray();
+    for (int i = 0; i < cs.length; i++) {
+      dp[i + 1] = cs[i] == '0' ? 0 : dp[i];
+      if (i > 0 && (cs[i - 1] == '1' || (cs[i - 1] == '2' && cs[i] <= '6'))) {
         dp[i + 1] += dp[i - 1];
       }
     }
-    return dp[s.length()];
+    return dp[cs.length];
   }
 
   public static void main(String[] args) {

@@ -11,33 +11,24 @@ import java.util.regex.Pattern;
 public class Solution125 {
 
   public boolean isPalindrome(String s) {
-/*    // 去掉空格以外的所有字符
-    s = removeOther(s);
-    // 反转字符串
-    String s2 = reverseStr(s);
-    // 对比
-    return s.equalsIgnoreCase(s2);*/
-
-    if (s.isEmpty()) {
+    if (s == null || s.length() == 0) {
       return true;
     }
-    int head = 0;
-    int end = s.length() - 1;
-    char[] str = s.toUpperCase().toCharArray();
-    while (head < end) {
-      if (!Character.isLetterOrDigit(str[head])) {
-        head ++;
-        continue;
+    int left = 0;
+    int right = s.length() - 1;
+    while (left < right) {
+      while (left < right && !Character.isLetterOrDigit(s.charAt(left))) {
+        left++;
       }
-      if (!Character.isLetterOrDigit(str[end])) {
-        end --;
-        continue;
+      while (left < right && !Character.isLetterOrDigit(s.charAt(right))) {
+        right--;
       }
-      if (str[head] != str[end]) {
+      if (Character.toLowerCase(s.charAt(left))!=Character.toLowerCase(s.charAt(right))) {
         return false;
+      } else {
+        left++;
+        right--;
       }
-      head ++;
-      end --;
     }
     return true;
   }
@@ -53,7 +44,7 @@ public class Solution125 {
   }
 
   public static void main(String[] args) {
-    String s = "A man, a plan, a canal: Panama";
+    String s = "race a car";
     Solution125 solution125 = new Solution125();
     System.out.println(solution125.isPalindrome(s));
   }

@@ -1,11 +1,10 @@
+
 package com.yonyou.letcode.tree;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Deque;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -17,47 +16,103 @@ import java.util.Set;
 public class Solution126 {
   List<List<String>> result = new ArrayList<>();
   Set<String> visited = new HashSet<>();
+  Map<String, Set<String>> map = new HashMap<>();
 
   public List<List<String>> findLadders(String beginWord, String endWord, List<String> wordList) {
-    if (!wordList.contains(endWord)) {
-      return result;
-    }
-    Map<String, List<String>> wordListMap = new HashMap<>();
-    for (int i = 0; i < wordList.size(); i++) {
-      for (int j = 0; j < beginWord.length(); j++) {
-        String key = wordList.get(i).substring(0, j) + "*" + wordList.get(i).substring(j +1);
-        if (wordListMap.containsKey(key)) {
-          wordListMap.get(key).add(wordList.get(i));
-        } else {
-          List<String> list = new ArrayList<>();
-          list.add(wordList.get(i));
-          wordListMap.put(key, list);
+    List<String> list = new ArrayList<>();
+    Set<String> wordSet = new HashSet<>(wordList);
+    wordSet.add(beginWord);
+    transWord(wordSet);
+    list.add(beginWord);
+    visited.add(beginWord);
+    int minpath = bfs(beginWord, endWord);
+    dfs(beginWord, endWord, list, minpath);
+    return result;
+  }
+
+  private void transWord(Set<String> wordList) {
+    for (String str : wordList) {
+      Set<String> set = new HashSet<>();
+      char[] a = str.toCharArray();
+      for (int n = 0; n < a.length; n++) {
+        char tmpChar = a[n];
+        for (int i = 0; i <= 26; i++) {
+          a[n] = (char)(i + 'a');
+          if (a[n] == tmpChar) {
+            continue;
+          }
+          String endW = new String(a);
+          if (wordList.contains(endW)) {
+            set.add(endW);
+          }
         }
+        a[n] = tmpChar;
       }
+      map.put(str, set);
     }
-    Deque<String> deque =  new LinkedList<>();
-    deque.add(beginWord);
-    int level = 1;
-    while (!deque.isEmpty()) {
+  }
 
-      int size = deque.size();
-
-      for (int i = 0; i < size; i++) {
-        String word = deque.pop();
-        result.get(level - 1).add(word);
-        String key = word.substring(0, i) + "*" + word.substring(i +1);
-        if (wordListMap.containsKey(key)) {
-          List<String> nextWordList = wordListMap.get(key);
-          for (String str : nextWordList) {
-            if (!visited.contains(word)) {
-              deque.push(str);
-            }
+  private int bfs(String beginWord, String endWord) {
+    int count = 0;
+    Set<String> visitedbfs = new HashSet<>();
+    Set<String> begins = new HashSet<>();
+    begins.add(beginWord);
+    visitedbfs.add(beginWord);
+    Set<String> ends = new HashSet<>();
+    ends.add(endWord);
+    while (!begins.isEmpty() && !ends.isEmpty()) {
+      if (begins.size() > ends.size()) {
+        swap(begins, ends);
+      }
+      count++;
+      Set<String> tmpSet = new HashSet<>();
+      for (String str : begins) {
+        Set<String> nextList = map.get(str);
+        for (String next : nextList) {
+          if (ends.contains(next)) {
+            return count + 1;
+          }
+          if (!visitedbfs.contains(next)) {
+            tmpSet.add(next);
+            visitedbfs.add(next);
           }
         }
       }
-      level++;
+      begins = tmpSet;
     }
-    return result;
+    return 0;
+  }
+
+  private void swap(Set<String> begins, Set<String> ends) {
+    Set<String> tmp = begins;
+    begins = ends;
+    ends = tmp;
+  }
+
+  private void dfs(String beginWord, String endWord, List<String> list, int minPath) {
+    if (list.size() > minPath) {
+      return;
+    }
+    if (beginWord.equals(endWord)) {
+      if (list.size() < minPath) {
+        minPath = Math.min(minPath, list.size());
+        result.clear();
+      }
+      if (list.size() <= minPath) {
+        result.add(new ArrayList<>(list));
+      }
+      return;
+    }
+    Set<String> nextList = map.get(beginWord);
+    for (String next : nextList) {
+      if (!visited.contains(next)) {
+        list.add(next);
+        visited.add(next);
+        dfs(next, endWord, list, minPath);
+        list.remove(next);
+        visited.remove(next);
+      }
+    }
   }
 
 
