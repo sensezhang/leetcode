@@ -39,6 +39,31 @@ public class TreeNodeUtil {
     return root;
   }
 
+  /**
+   * [1,-1,2,3]
+   * @param arr
+   * @return
+   */
+  public static TreeNode buildTreeNode(Integer[] arr) {
+    if (arr == null || arr.length == 0 || arr[0] == null) {
+      return null;
+    }
+    Queue<TreeNode> queue = new ArrayDeque<>();
+    TreeNode root = new TreeNode(arr[0]);
+    queue.add(root);
+    for (int i = 1; i < arr.length && !queue.isEmpty(); i+=2) {
+      TreeNode curr = queue.poll();
+      if (arr[i] != null) {
+        curr.left = new TreeNode(arr[i]);
+        queue.add(curr.left);
+      }
+      if (arr[i+1] != null) {
+        curr.right = new TreeNode(arr[i+1]);
+        queue.add(curr.right);
+      }
+    }
+    return root;
+  }
 //  /**
 //   * 前序遍历 根->左->右
 //   */
