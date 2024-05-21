@@ -31,12 +31,12 @@ public class Trie {
             if (trie.hasKey(nodes[i])) {
                 trie = trie.getKey(nodes[i]);
                 line.add(nodes[i]);
-                if (trie.isEnd) {
-                    lists.add(String.join(".", line));
-                }
             } else {
                 return lists;
             }
+        }
+        if (trie.isEnd) {
+            lists.add(String.join(".", line));
         }
         // 查找子节点
         dfs(trie, lists, line, 0);
@@ -141,7 +141,7 @@ public class Trie {
         //JVM空闲内存(M)
         double free = (Runtime.getRuntime().freeMemory()) / (1024.0 * 1024);
         long start = System.currentTimeMillis();
-        for (int i = 0; i < 100000; i++) {
+        for (int i = 0; i < 1000000; i++) {
             String random = getRandom(i);
             if (i == 5000) {
                 str = random;
@@ -161,8 +161,8 @@ public class Trie {
     private static String getRandom(int i) {
         String s = "";
         Random random = new Random();
-        for (int a = 0; a < 2 + random.nextInt(8); a++) {
-            if (a != 0 && a % 2 == 0) {
+        for (int a = 0; a < 2 + random.nextInt(30); a++) {
+            if (a != 0 && a % 5 == 0) {
                 s += ".";
             }
             s += (char)('a' + random.nextInt(1+ (i % 26)));
